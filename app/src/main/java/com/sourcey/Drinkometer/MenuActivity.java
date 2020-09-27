@@ -2,15 +2,20 @@ package com.sourcey.Drinkometer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.sourcey.Drinkometer.BackgroundService.LocalBinder;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class MenuActivity extends AppCompatActivity {
@@ -20,21 +25,27 @@ public class MenuActivity extends AppCompatActivity {
     private Button Friends;
     private Button Pubs;
     private Button Lock;
-
-
+    private BackgroundService mService;
+    private boolean mBound = false;
+    private final static int INTERVAL = 1000 * 60 * 5; //5 minutes
+    private Handler mHandler = new Handler();
+    private TextView sober;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         TextView username = findViewById(R.id.UserName);
-        TextView sober = findViewById(R.id.soberMeter);
-        Intent i = getIntent();
+        sober = findViewById(R.id.soberMeter);
+        Intent intent = getIntent();
 
-            user = (Persondata) i.getSerializableExtra("PersonData");
+        user = (Persondata) intent.getSerializableExtra("PersonData");
 
         username.setText(user.getUsername());
-        sober.setText(Sobermeter());
+
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        startRepeatingTask();
+
         Alcohol = findViewById(R.id.btn_alcohol);
         Alcohol.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,12 +69,31 @@ public class MenuActivity extends AppCompatActivity {
                 openFriendsActivity();
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        stopRepeatingTask();
+        super.onDestroy();
+    }
 
+    Runnable mHandlerTask = new Runnable()
+    {
+        @Override
+        public void run() {
+            sober.setText(soberMeter(user));
+            mHandler.postDelayed(mHandlerTask, INTERVAL);
+        }
+    };
 
+    void startRepeatingTask()
+    {
+        mHandlerTask.run();
+    }
 
-
-
+    void stopRepeatingTask()
+    {
+        mHandler.removeCallbacks(mHandlerTask);
     }
 
     public void openAlcoholActivity() {
@@ -96,39 +126,49 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public String Sobermeter() {
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to BackgroundService, cast the IBinder and get BackgroundService instance
+            LocalBinder binder = (LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    public String soberMeter(Persondata user) {
         String sober = "";
         double ebac = 0.0;
-        if (user.getAlcohol().isEmpty()) {
-            sober = "You should be sober!";
-        }
-        else{
-            for (int i=0 ; i<user.getAlcohol().size() ; i++) {
-               Date before = user.getAlcohol().get(i).getFrist();
-               double timesince = Duration.between(before.toInstant(), (new java.util.Date()).toInstant()).toMinutes()/60.0;
+        if (!user.getAlcohol().isEmpty()) {
+            for (int i = 0; i < user.getAlcohol().size(); i++) {
+                Date before = user.getAlcohol().get(i).getFirst();
+                double timeSince = Duration.between(before.toInstant(), (new java.util.Date()).toInstant()).toMinutes() / 60.0;
                 if (user.getSex() == 'M') {
-
-                    if (user.getAlcohol().get(i).getSecond() - timesince*0.015 > 0.0){
-                        ebac += user.getAlcohol().get(i).getSecond() - timesince*0.015;
+                    if (user.getAlcohol().get(i).getSecond() - timeSince * 0.015 > 0.0) {
+                        ebac += user.getAlcohol().get(i).getSecond() - timeSince * 0.015;
                     }
-                }
-                else {
-                    if (user.getAlcohol().get(i).getSecond() - timesince*0.017 > 0.0){
-                        ebac += user.getAlcohol().get(i).getSecond() - timesince*0.017;
+                } else {
+                    if (user.getAlcohol().get(i).getSecond() - timeSince * 0.017 > 0.0) {
+                        ebac += user.getAlcohol().get(i).getSecond() - timeSince * 0.017;
                     }
                 }
             }
         }
         if (user.getSex() == 'M') {
-            sober = "You should be sober in " + String.format("%.2f%n" , ebac/0.015) + " hours";
-        }
-        else {
-            sober = "You should be sober in " + ebac/0.017 + " hours";
+            sober = "You should be sober in " + String.format("%.2f%n", ebac / 0.015) + " hours";
+        } else {
+            sober = "You should be sober in " + ebac / 0.017 + " hours";
         }
         if (ebac != 0.0) {
             return sober;
-        }
-        else{
+        } else {
             return "You should be sober!";
         }
     }

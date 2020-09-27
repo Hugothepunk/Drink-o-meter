@@ -489,4 +489,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent openMenuActivity = new Intent(this, MenuActivity.class);
+        openMenuActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(openMenuActivity, 0);
+    }
+
 }

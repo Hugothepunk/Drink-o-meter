@@ -1,11 +1,7 @@
 package com.sourcey.Drinkometer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,12 +10,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.time.ZonedDateTime;
-import java.util.Calendar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.Date;
 
 
-public class AlcoholActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class AlcoholActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinneralcohol;
     private static final String[] paths = {"Beer 4,5%", "Wine 12%", "Shot", "Manual selection"};
@@ -34,11 +30,8 @@ public class AlcoholActivity extends AppCompatActivity implements AdapterView.On
     private Button btn_add;
     private Persondata user;
 
-
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alcohol);
 
@@ -46,24 +39,24 @@ public class AlcoholActivity extends AppCompatActivity implements AdapterView.On
 
         user = (Persondata) i.getSerializableExtra("PersonData");
 
-        _amount = (EditText)findViewById(R.id.input_amount);
-        _percent = (EditText)findViewById(R.id.input_percent);
-        btn_add = (Button)findViewById(R.id.button_add);
-        spinneralcohol = (Spinner)findViewById(R.id.alcoholinput);
+        _amount = (EditText) findViewById(R.id.input_amount);
+        _percent = (EditText) findViewById(R.id.input_percent);
+        btn_add = (Button) findViewById(R.id.button_add);
+        spinneralcohol = (Spinner) findViewById(R.id.alcoholinput);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlcoholActivity.this,
-                android.R.layout.simple_spinner_item,paths);
+                android.R.layout.simple_spinner_item, paths);
 
-        spinnerbeer = (Spinner)findViewById(R.id.beer);
+        spinnerbeer = (Spinner) findViewById(R.id.beer);
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(AlcoholActivity.this,
-                android.R.layout.simple_spinner_item,paths1);
+                android.R.layout.simple_spinner_item, paths1);
 
-        spinnerwine = (Spinner)findViewById(R.id.wine);
+        spinnerwine = (Spinner) findViewById(R.id.wine);
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(AlcoholActivity.this,
-                android.R.layout.simple_spinner_item,paths2);
+                android.R.layout.simple_spinner_item, paths2);
 
-        spinnershot = (Spinner)findViewById(R.id.shot);
+        spinnershot = (Spinner) findViewById(R.id.shot);
         ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(AlcoholActivity.this,
-                android.R.layout.simple_spinner_item,paths3);
+                android.R.layout.simple_spinner_item, paths3);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinneralcohol.setAdapter(adapter);
@@ -81,8 +74,6 @@ public class AlcoholActivity extends AppCompatActivity implements AdapterView.On
         spinnershot.setAdapter(adapter3);
         spinnershot.setOnItemSelectedListener(this);
 
-
-
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,37 +81,60 @@ public class AlcoholActivity extends AppCompatActivity implements AdapterView.On
                 Double alcoholForTemplate = 0.0;
                 switch (spinneralcohol.getSelectedItemPosition()) {
                     case 0:
-                        switch (spinnerbeer.getSelectedItemPosition()){
-                            case 0: alcoholForTemplate = calculateAlcohol(33, 4.5); break;
-                            case 1: alcoholForTemplate = calculateAlcohol(40, 4.5); break;
-                            case 2: alcoholForTemplate = calculateAlcohol(50, 4.5); break;
+                        switch (spinnerbeer.getSelectedItemPosition()) {
+                            case 0:
+                                alcoholForTemplate = calculateAlcohol(33, 4.5);
+                                break;
+                            case 1:
+                                alcoholForTemplate = calculateAlcohol(40, 4.5);
+                                break;
+                            case 2:
+                                alcoholForTemplate = calculateAlcohol(50, 4.5);
+                                break;
                         }
                         break;
                     case 1:
-                        switch (spinnerwine.getSelectedItemPosition()){
-                            case 0: alcoholForTemplate = calculateAlcohol(10, 12); break;
-                            case 1: alcoholForTemplate = calculateAlcohol(20, 12); break;
-                            case 2: alcoholForTemplate = calculateAlcohol(30, 12); break;
-                            case 3: alcoholForTemplate = calculateAlcohol(50, 12); break;
+                        switch (spinnerwine.getSelectedItemPosition()) {
+                            case 0:
+                                alcoholForTemplate = calculateAlcohol(10, 12);
+                                break;
+                            case 1:
+                                alcoholForTemplate = calculateAlcohol(20, 12);
+                                break;
+                            case 2:
+                                alcoholForTemplate = calculateAlcohol(30, 12);
+                                break;
+                            case 3:
+                                alcoholForTemplate = calculateAlcohol(50, 12);
+                                break;
                         }
                         break;
                     case 2:
-                        switch (spinnershot.getSelectedItemPosition()){
-                            case 0: alcoholForTemplate = calculateAlcohol(2, 40); break;
-                            case 1: alcoholForTemplate = calculateAlcohol(4, 40); break;
-                            case 2: alcoholForTemplate = calculateAlcohol(2, 80); break;
-                            case 3: alcoholForTemplate = calculateAlcohol(4, 80); break;
+                        switch (spinnershot.getSelectedItemPosition()) {
+                            case 0:
+                                alcoholForTemplate = calculateAlcohol(2, 40);
+                                break;
+                            case 1:
+                                alcoholForTemplate = calculateAlcohol(4, 40);
+                                break;
+                            case 2:
+                                alcoholForTemplate = calculateAlcohol(2, 80);
+                                break;
+                            case 3:
+                                alcoholForTemplate = calculateAlcohol(4, 80);
+                                break;
                         }
                         break;
                     case 3:
-                        alcoholForTemplate = calculateAlcohol(Integer.parseInt(_amount.getText().toString()),Double.parseDouble(_percent.getText().toString()));
+                        alcoholForTemplate = calculateAlcohol(Integer.parseInt(_amount.getText().toString()), Double.parseDouble(_percent.getText().toString()));
                         break;
                 }
-                user.addAlcohol(new OwnPair<>(actualTime,alcoholForTemplate));
-                Toast.makeText(AlcoholActivity.this, "Alcohol added",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(AlcoholActivity.this, MenuActivity.class);
-                    intent.putExtra("PersonData", user);
-                startActivity(intent);
+                user.addAlcohol(new OwnPair<>(actualTime, alcoholForTemplate));
+                Toast.makeText(AlcoholActivity.this, "Alcohol added", Toast.LENGTH_SHORT).show();
+                Intent openMenuActivity = new Intent(AlcoholActivity.this, MenuActivity.class);
+                openMenuActivity.putExtra("PersonData", user);
+                openMenuActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivityIfNeeded(openMenuActivity, 0);
             }
         });
 
@@ -166,14 +180,20 @@ public class AlcoholActivity extends AppCompatActivity implements AdapterView.On
 
     }
 
-    private double calculateAlcohol(int amount, double percent){
-       double temp = (0.806*((amount/100.0)*(percent/100)*1000*0.78506/10)*1.2)/user.getWeight();
-       if (user.getSex() == 'M') {
-            return temp/0.58;
-       }
-       else {
-           return temp/0.49;
-       }
+    private double calculateAlcohol(int amount, double percent) {
+        double temp = (0.806 * ((amount / 100.0) * (percent / 100) * 1000 * 0.78506 / 10) * 1.2) / user.getWeight();
+        if (user.getSex() == 'M') {
+            return temp / 0.58;
+        } else {
+            return temp / 0.49;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent openMenuActivity = new Intent(this, MenuActivity.class);
+        openMenuActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivityIfNeeded(openMenuActivity, 0);
     }
 
 }

@@ -11,7 +11,7 @@ public class OwnPair<A, B> implements Serializable {
         this.second = second;
     }
 
-    public A getFrist() {
+    public A getFirst() {
         return frist;
     }
 
