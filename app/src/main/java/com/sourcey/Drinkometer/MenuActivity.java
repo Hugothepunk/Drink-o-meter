@@ -69,6 +69,8 @@ public class MenuActivity extends AppCompatActivity {
                 openFriendsActivity();
             }
         });
+
+        mHandlerTask.run();
     }
 
     @Override

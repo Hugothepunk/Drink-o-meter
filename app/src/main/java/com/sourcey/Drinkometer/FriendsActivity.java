@@ -93,10 +93,10 @@ public class FriendsActivity extends AppCompatActivity {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             String connectionUrl =
-                    "jdbc:jtds:sqlserver://193.6.19.58:14033;"
-                            + "database=DrinkOMeterDb;"
-                            + "user=drinkometer;"
-                            + "password=UEuMAi0j0MzZ;"
+                    "jdbc:jtds:sqlserver://SQL5080.site4now.net:1433;"
+                            + "database=DB_A68361_drinkometer;"
+                            + "user=DB_A68361_drinkometer_admin;"
+                            + "password=drinkometer1;"
                             + "encrypt=false;"
                             + "trustServerCertificate=true;"
                             + "loginTimeout=30;";
@@ -139,10 +139,10 @@ public class FriendsActivity extends AppCompatActivity {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             String connectionUrl =
-                    "jdbc:jtds:sqlserver://193.6.19.58:14033;"
-                            + "database=DrinkOMeterDb;"
-                            + "user=drinkometer;"
-                            + "password=UEuMAi0j0MzZ;"
+                    "jdbc:jtds:sqlserver://SQL5080.site4now.net:1433;"
+                            + "database=DB_A68361_drinkometer;"
+                            + "user=DB_A68361_drinkometer_admin;"
+                            + "password=drinkometer1;"
                             + "encrypt=false;"
                             + "trustServerCertificate=true;"
                             + "loginTimeout=30;";
