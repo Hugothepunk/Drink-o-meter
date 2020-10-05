@@ -1,7 +1,9 @@
 package com.sourcey.Drinkometer;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +11,11 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sourcey.Drinkometer.BackgroundService.LocalBinder;
 
@@ -19,6 +23,7 @@ import java.time.Duration;
 import java.util.Date;
 
 public class MenuActivity extends AppCompatActivity {
+    private static final int START_ALCOHOL_ACTIVITY = 1;
     private Persondata user;
     private Button Alcohol;
     private Button Map;
@@ -27,8 +32,8 @@ public class MenuActivity extends AppCompatActivity {
     private Button Lock;
     private BackgroundService mService;
     private boolean mBound = false;
-    private final static int INTERVAL = 1000 * 60 * 5; //5 minutes
-    private Handler mHandler = new Handler();
+    private final static int INTERVAL = 1000 * 60 * 1; //1 minutes
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     private TextView sober;
 
     @Override
@@ -44,7 +49,10 @@ public class MenuActivity extends AppCompatActivity {
         username.setText(user.getUsername());
 
         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        startRepeatingTask();
+
+        sober.setText(soberMeter(user));
+
+//        startRepeatingTask();
 
         Alcohol = findViewById(R.id.btn_alcohol);
         Alcohol.setOnClickListener(new View.OnClickListener() {
@@ -69,39 +77,66 @@ public class MenuActivity extends AppCompatActivity {
                 openFriendsActivity();
             }
         });
+    }
 
-        mHandlerTask.run();
+    @Override
+    protected void onResume() {
+//        startRepeatingTask();
+        super.onResume();
+        sober.setText(soberMeter(user));
+    }
+
+    @Override
+    protected void onPause() {
+//        stopRepeatingTask();
+        super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        stopRepeatingTask();
+//        stopRepeatingTask();
         super.onDestroy();
     }
 
-    Runnable mHandlerTask = new Runnable()
-    {
-        @Override
-        public void run() {
-            sober.setText(soberMeter(user));
-            mHandler.postDelayed(mHandlerTask, INTERVAL);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == START_ALCOHOL_ACTIVITY) {
+            if(resultCode == Activity.RESULT_OK){
+                user = (Persondata) data.getSerializableExtra("PersonData");
+                sober.setText(soberMeter(user));
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
         }
-    };
-
-    void startRepeatingTask()
-    {
-        mHandlerTask.run();
     }
 
-    void stopRepeatingTask()
-    {
-        mHandler.removeCallbacks(mHandlerTask);
-    }
+    //    Runnable mHandlerTask = new Runnable()
+//    {
+//        @Override
+//        public void run() {
+//            user = (Persondata) getIntent().getSerializableExtra("PersonData");
+//            sober.setText(soberMeter(user));
+//            mHandler.postDelayed(mHandlerTask, INTERVAL);
+//        }
+//    };
+//
+//    void startRepeatingTask()
+//    {
+//        mHandlerTask.run();
+//    }
+//
+//    void stopRepeatingTask()
+//    {
+//        mHandler.removeCallbacks(mHandlerTask);
+//    }
 
     public void openAlcoholActivity() {
         Intent intent = new Intent(this, AlcoholActivity.class);
         intent.putExtra("PersonData", user);
-        startActivity(intent);
+        startActivityForResult(intent,START_ALCOHOL_ACTIVITY);
     }
 
     public void openMapActivity() {
@@ -152,6 +187,7 @@ public class MenuActivity extends AppCompatActivity {
             for (int i = 0; i < user.getAlcohol().size(); i++) {
                 Date before = user.getAlcohol().get(i).getFirst();
                 double timeSince = Duration.between(before.toInstant(), (new java.util.Date()).toInstant()).toMinutes() / 60.0;
+                Toast.makeText(getBaseContext(), "Time of Alcohol input" + before, Toast.LENGTH_SHORT).show();
                 if (user.getSex() == 'M') {
                     if (user.getAlcohol().get(i).getSecond() - timeSince * 0.015 > 0.0) {
                         ebac += user.getAlcohol().get(i).getSecond() - timeSince * 0.015;
