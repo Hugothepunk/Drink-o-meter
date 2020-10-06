@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Drink-o-meter.iml" filepath="$PROJECT_DIR$/.idea/Drink-o-meter.iml" group="Drink-o-meter" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Drink-o-meter/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Drink-o-meter-master.iml" filepath="$PROJECT_DIR$/.idea/modules/Drink-o-meter-master.iml" group="Drink-o-meter-master" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Drink-o-meter-master/app" />
     </modules>
   </component>
 </project>

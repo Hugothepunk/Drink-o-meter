@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sourcey.Drinkometer">
 <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,13 +15,14 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAaFMRlRWAkou0Ofqf9g8BsDdFwbxEp4xQ" />
-        <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".MenuActivity"/>
         <activity android:name=".LockActivity" />
         <activity android:name=".FriendsActivity" />
         <activity android:name=".PubsActivity" />
         <activity android:name=".AlcoholActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".PermissionsActivity" />
+        <activity android:name=".CallingActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

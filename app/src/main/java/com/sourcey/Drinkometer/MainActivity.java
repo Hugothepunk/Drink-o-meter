@@ -2,9 +2,11 @@ package com.sourcey.Drinkometer;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 
@@ -15,9 +17,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Handler handler = new Handler();
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                startActivity(intent);
+            }
+        }, 3000);   //5 seconds
     }
 
     @Override
@@ -42,3 +48,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
+/*
+try {
+        Log.v("msg", "WAIT CheckFrequencyRun");
+        Thread.sleep(5000);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+
+        } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+        }
+
+ */
