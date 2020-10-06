@@ -140,6 +140,20 @@
                 android:hint="Weight"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Phone Label -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_tel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="PhoneNumber"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
         <!-- Signup Button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_signup"

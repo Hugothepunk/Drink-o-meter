@@ -38,6 +38,8 @@ public class SignupActivity extends AppCompatActivity {
     EditText _passwordText;
     @BindView(R.id.input_reEnterPassword)
     EditText _reEnterPasswordText;
+    @BindView(R.id.input_tel)
+    EditText _telText;
     @BindView(R.id.btn_signup)
     Button _signupButton;
     @BindView(R.id.input_weight)
@@ -94,6 +96,8 @@ public class SignupActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         String reEnterPassword = _reEnterPasswordText.getText().toString();
+        String tel = _telText.getText().toString();
+        tel = tel.substring(tel.length()-9,tel.length());
         RadioGroup radioSexGroup = findViewById(R.id.radioSex);
         int selectedId = radioSexGroup.getCheckedRadioButtonId();
         char sex = 'M';
@@ -118,8 +122,8 @@ public class SignupActivity extends AppCompatActivity {
                             + "loginTimeout=30;";
             Connection connection = DriverManager.getConnection(connectionUrl);
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate("INSERT INTO Users(FirstName,LastName,UserName,Password,Sex,Weight,Email)"
-                    + "VALUES ('" + firstName + "', '" + lastName + "', '" + userName + "', '" + password + "', '" + sex + "', '" + weight + "', '" + email + "')");
+            stmt.executeUpdate("INSERT INTO Users(FirstName,LastName,UserName,Password,Sex,Weight,Email,x,y,Tel)"
+                    + "VALUES ('" + firstName + "', '" + lastName + "', '" + userName + "', '" + password + "', '" + sex + "', '" + weight + "', '" + email + "', 47.0855771, 17.9095687, '" + tel +"')");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }

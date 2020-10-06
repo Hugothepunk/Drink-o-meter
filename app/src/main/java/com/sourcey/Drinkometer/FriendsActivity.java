@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,6 +88,7 @@ public class FriendsActivity extends AppCompatActivity {
 
     public void FriendList() {
         ArrayList<String> Friends = new ArrayList<>();
+        ArrayList<String> phoneNumbers = new ArrayList<>();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -113,10 +115,12 @@ public class FriendsActivity extends AppCompatActivity {
                 Flist.add(Integer.parseInt(FriendID));
             }
             for (int i = 0; i < Flist.size(); i++) {
-                ResultSet f = stmt.executeQuery("SELECT * FROM Users WHERE ID='" + Flist.get(i) + "'");
+                ResultSet f = stmt.executeQuery("SELECT UserName,Tel FROM Users WHERE ID='" + Flist.get(i) + "'");
                 f.next();
                 String Friend = f.getString("UserName");
+                String phoneNumber = f.getString("Tel");
                 f = null;
+                phoneNumbers.add(phoneNumber);
                 Friends.add(Friend);
             }
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.listview, R.id.textView, Friends);
@@ -129,6 +133,21 @@ public class FriendsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        friendList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openCallActivity(phoneNumbers.get(position));
+            }
+        });
+
+    }
+
+
+    public void openCallActivity(String phone) {
+        Intent intent = new Intent(this, CallingActivity.class);
+        phone = "+36" + phone;
+        intent.putExtra("Phone",phone);
+        startActivity(intent);
     }
 
     public void FriendAdd() {

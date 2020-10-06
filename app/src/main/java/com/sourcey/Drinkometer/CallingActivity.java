@@ -29,6 +29,8 @@ public class CallingActivity extends AppCompatActivity {
         dialBtn = (Button) findViewById(R.id.dial);
         smsBtn = (Button) findViewById(R.id.sms);
 
+        number.setText(getIntent().getSerializableExtra("Phone").toString());
+
         // add PhoneStateListener for monitoring
         MyPhoneListener phoneListener = new MyPhoneListener();
         TelephonyManager telephonyManager =

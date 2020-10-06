@@ -25,16 +25,6 @@
             android:gravity="center"
             android:textSize="16dip"/>
 
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_call"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:padding="12dp"
-            android:text="Open"/>
-
         <!--  Alcohol button -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_alcohol"

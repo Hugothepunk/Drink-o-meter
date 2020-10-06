@@ -131,10 +131,12 @@ public class AlcoholActivity extends AppCompatActivity implements AdapterView.On
                 }
                 user.addAlcohol(new OwnPair<>(actualTime, alcoholForTemplate));
                 Toast.makeText(AlcoholActivity.this, "Alcohol added", Toast.LENGTH_SHORT).show();
-                Intent openMenuActivity = new Intent(AlcoholActivity.this, MenuActivity.class);
+//                Intent openMenuActivity = new Intent(AlcoholActivity.this, MenuActivity.class);
+                Intent openMenuActivity = new Intent();
                 openMenuActivity.putExtra("PersonData", user);
-                openMenuActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivityIfNeeded(openMenuActivity, 0);
+//                openMenuActivity.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                setResult(RESULT_OK, openMenuActivity);
+                finish();
             }
         });
 
